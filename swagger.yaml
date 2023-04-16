@@ -26,11 +26,11 @@ paths:
               - $ref: '#/components/schemas/SignupRequest'
               - example:
                   name: Test
-                  email: mh3908334@gmail.com
+                  email: test@gmail.com
                   password: '123456'
             example:
               name: Test
-              email: mh3908334@gmail.com
+              email: test@gmail.com
               password: '123456'
         required: true
       responses:
@@ -81,9 +81,9 @@ paths:
               allOf:
               - $ref: '#/components/schemas/ForgetPasswordRequest'
               - example:
-                  email: mh3908334@gmail.com
+                  email: test@gmail.com
             example:
-              email: mh3908334@gmail.com
+              email: test@gmail.com
         required: true
       responses:
         '200':
@@ -106,10 +106,10 @@ paths:
               allOf:
               - $ref: '#/components/schemas/VerifyResetCodeRequest'
               - example:
-                  email: mh3908334@gmail.com
+                  email: test@gmail.com
                   resetCode: '573257'
             example:
-              email: mh3908334@gmail.com
+              email: test@gmail.com
               resetCode: '573257'
         required: true
       responses:
@@ -134,10 +134,10 @@ paths:
               - $ref: '#/components/schemas/ResetPasswordRequest'
               - example:
                   newPassword: '123456'
-                  email: mh3908334@gmail.com
+                  email: test@gmail.com
             example:
               newPassword: '123456'
-              email: mh3908334@gmail.com
+              email: test@gmail.com
         required: true
       responses:
         '200':
