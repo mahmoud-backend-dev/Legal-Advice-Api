@@ -2,22 +2,23 @@ require('express-async-errors');
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const app = express();
+const port = process.env.PORT || 1812;
 // Setting Security For App
 const cors = require('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit')
 const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
-var xss = require('xss-clean')
+const xss = require('xss-clean')
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
-const app = express();
-const port = process.env.PORT || 1812;
 const errorHandler = require('./middleware/error-handler');
 const notFoundErr = require('./middleware/notFoundMiddleware');
 const connectDB = require('./db/connectDB');
 const mountRoutes = require('./routes');
+
 
 
 // Enable other domains to access your application
@@ -40,6 +41,7 @@ app.use(mongoSanitize());
 app.use(xss())
 
 
+
 // Limit each IP to 100 requests per `window` (here, per 15 minutes)
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,  // 15 minutes
@@ -53,11 +55,10 @@ app.use(limiter)
 
 
 // Express middleware to protect against HTTP Parameter Pollution attacks
-app.use(hpp)
+app.use(hpp());
 
 // Mount Api
 mountRoutes(app);
-
 
 app.use(errorHandler);
 app.use(notFoundErr);

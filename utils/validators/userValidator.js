@@ -53,6 +53,15 @@ exports.signupValidator = [
   validationErrorMiddleWare
 ];
 
+
+exports.signupAsAdminValidator = [
+  body('name').notEmpty().withMessage('Name required'),
+  body('email').notEmpty().withMessage('E-mail required'),
+  body('password').notEmpty().withMessage('Password required')
+    .isLength({ min: 6 }).withMessage('Too short password enter more than 6 characters'),
+  validationErrorMiddleWare
+];
+
 exports.loginValidator = [
   body('email').notEmpty().withMessage('E-mail required')
     .isEmail().withMessage('E-mail Invalid Format'),

@@ -10,7 +10,8 @@ const {
   loginValidator,
   forgetPasswordValidator,
   verifyResetCodeValidator,
-  resetPasswordValidator
+  resetPasswordValidator,
+  signupAsAdminValidator
 } = require('../utils/validators/userValidator')
 
 const {
@@ -25,7 +26,7 @@ const {
   signupAsAdmin,
 } = require('../controller/userController')
 
-router.post('/admin/signup', signupValidator, signupAsAdmin);
+router.post('/admin/signup', signupAsAdminValidator, signupAsAdmin);
 router.post('/admin/:id', uploadSingleImage('image', 'MyProfile'), createAboutMeValidator, createAboutMe);
 router.route('/:id')
   .get(updateMeValidator, getAboutMe)

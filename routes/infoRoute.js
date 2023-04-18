@@ -22,12 +22,13 @@ const {
   getSpecificCriminalDictionary
 } = require('../controller/infoController');
 
+
 router.route('/links')
   .post(authMiddleWare, allowTo('manager', 'admin'), addLinkValidator, addLinksOfVideos)
   .get(getAllLinksOfVideos)
-  .delete(authMiddleWare, allowTo('manager', 'admin'), deleteLinkValidator, deleteLink);
+  .patch(authMiddleWare, allowTo('manager', 'admin'), deleteLinkValidator, deleteLink);
 
-  
+
 router.route('/criminalDictionary')
   .post(authMiddleWare, allowTo('manager', 'admin'), addcriminalDictionaryValidator, addCriminalDictionary)
   .get(getAllCriminalDictionary);

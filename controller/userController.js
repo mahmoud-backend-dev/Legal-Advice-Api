@@ -21,13 +21,21 @@ exports.allowTo = (...roles) => asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/user/admin
 // @ptotect Protect Admin
 exports.signupAsAdmin = asyncHandler(async (req, res) => {
-  req.body.role = 'admin';
-  const user = await User.create(req.body);
+  const user = await User.findOneAndUpdate(
+    {
+      role:'admin'
+    },
+    req.body,
+    {
+      new:true
+    }
+  )
+  const token = user.createJWT();
   await user.hashPass();
-  res.status(StatusCodes.CREATED).json({ user: santizeData(user) });
+  res.status(StatusCodes.CREATED).json({ token, user: santizeData(user) });
 })
 // @decs About Me
-// @route POST /api/v1/user/aboutMe
+// @route POST /api/v1/user/aboutMe/:id
 // @ptotect Protected/Admin/Manager
 exports.createAboutMe = asyncHandler(async (req, res) => {
   req.body.image = `${process.env.BASE_URL}/MyProfile/${req.file.filename}`;

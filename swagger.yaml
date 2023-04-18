@@ -190,12 +190,23 @@ paths:
       deprecated: false
       security:
       - bearer: []
-    delete:
+    patch:
       tags:
       - Videos
       summary: Remove Link
       operationId: RemoveLink
       parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                link:
+                  type: string
+              required:
+                - link
+        required: true
       responses:
         '200':
           description: ''
