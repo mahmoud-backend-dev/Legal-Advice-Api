@@ -20,6 +20,15 @@ exports.getAllQuestions = asyncHandler(async (req, res) => {
 });
 
 
+// @decs Get Specific Questions
+// @route GET /api/v1/questions/:id
+// @ptotect Protected/User/Manager/Admin
+exports.getSpecificQuestion = asyncHandler(async (req, res) => {
+  const questions = await Question.findById(req.params.id).select('subTitle -_id');
+  res.status(StatusCodes.OK).json({ status: "Success", count: questions.length, questions });
+});
+
+
 // @decs Update Specific Question
 // @route GET /api/v1/questions/:id
 // @ptotect Protected/Manager/Admin

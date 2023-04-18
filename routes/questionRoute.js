@@ -14,7 +14,8 @@ const {
   addQuestion,
   getAllQuestions,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  getSpecificQuestion
 } = require('../controller/questionController');
 
 router.route('/')
@@ -27,6 +28,7 @@ router.route('/')
   .get(authMiddleWare, getAllQuestions);
 
 router.route('/:id')
+  .get(authMiddleWare, idParamQueValidator, getSpecificQuestion)
   .patch(
     authMiddleWare,
     allowTo('manager', 'admin'),
