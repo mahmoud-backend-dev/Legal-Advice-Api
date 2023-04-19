@@ -32,6 +32,7 @@ app.get('/', (req, res) => res.redirect('/api-docs'));
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 // To remove data using these defaults, To apply data sanitization

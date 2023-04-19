@@ -13,6 +13,10 @@ const subTitleSchema = new mongoose.Schema({
 
 
 const queSchema = new mongoose.Schema({
+  image: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,

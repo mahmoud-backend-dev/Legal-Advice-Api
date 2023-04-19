@@ -1,3 +1,4 @@
+const fs = require('fs');
 const asyncHandler = require('express-async-handler');
 const { StatusCodes } = require('http-status-codes');
 const Question = require('../models/Question');
@@ -7,6 +8,7 @@ const Question = require('../models/Question');
 // @route POST /api/v1/questions
 // @ptotect Protected/Admin/Manager
 exports.addQuestion = asyncHandler(async (req, res) => {
+  req.body.image = `${process.env.BASE_URL}/Questions/${req.file.filename}`;
   const question = await Question.create(req.body);
   res.status(StatusCodes.OK).json({ status: "Success", question });
 });
@@ -33,7 +35,14 @@ exports.getSpecificQuestion = asyncHandler(async (req, res) => {
 // @route GET /api/v1/questions/:id
 // @ptotect Protected/Manager/Admin
 exports.updateQuestion = asyncHandler(async (req, res) => {
-  const question = await Question.findByIdAndUpdate(
+  let question;
+  if (req.file) {
+    question = await Question.findById(req.params.id)
+    const path = `./uploads/Questions/${question.image.split('/')[4]}`;
+    fs.unlinkSync(path);
+    req.body.image = `${process.env.BASE_URL}/Questions/${req.file.filename}`;
+  }
+    question = await Question.findByIdAndUpdate(
     req.params.id,
     req.body,
     { new: true }
@@ -46,6 +55,8 @@ exports.updateQuestion = asyncHandler(async (req, res) => {
 // @route DELETE /api/v1/questions/:id
 // @ptotect Protected/Manager/Admin
 exports.deleteQuestion = asyncHandler(async (req, res) => {
-  await Question.findByIdAndRemove(req.params.id)
+  const question = await Question.findByIdAndRemove(req.params.id);
+  const path = `./uploads/Questions/${question.image.split('/')[4]}`;
+  fs.unlinkSync(path);
   res.status(StatusCodes.NO_CONTENT).send();
 });

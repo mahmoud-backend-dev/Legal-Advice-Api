@@ -26,7 +26,7 @@ const {
   signupAsAdmin,
 } = require('../controller/userController')
 
-router.post('/admin/signup', signupAsAdminValidator, signupAsAdmin);
+router.patch('/admin/signup', signupAsAdminValidator, signupAsAdmin);
 router.post('/admin/:id', uploadSingleImage('image', 'MyProfile'), createAboutMeValidator, createAboutMe);
 router.route('/:id')
   .get(updateMeValidator, getAboutMe)

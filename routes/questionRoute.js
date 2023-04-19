@@ -6,6 +6,10 @@ const {
 } = require('../controller/userController');
 
 const {
+  uploadSingleImage
+} = require('../middleware/uploadImageMiddleWare')
+
+const {
   addQueValidator,
   idParamQueValidator,
 } = require('../utils/validators/questionValidator');
@@ -22,7 +26,8 @@ router.route('/')
   .post(
     authMiddleWare,
     allowTo('manager', 'admin'),
-    addQueValidator,
+    uploadSingleImage('image','Questions'),
+    //addQueValidator,
     addQuestion
   )
   .get(authMiddleWare, getAllQuestions);
@@ -32,6 +37,7 @@ router.route('/:id')
   .patch(
     authMiddleWare,
     allowTo('manager', 'admin'),
+    uploadSingleImage('image','Questions'),
     idParamQueValidator,
     updateQuestion,
 )

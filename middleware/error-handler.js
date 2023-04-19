@@ -1,4 +1,4 @@
-
+const fs = require('fs');
 const {StatusCodes} = require('http-status-codes')
 const errorHandlerMiddleware = (err, req, res,next) => {
     const customError = {
@@ -26,6 +26,17 @@ const errorHandlerMiddleware = (err, req, res,next) => {
     if (err.name === 'TokenExpiredError') {
         customError.msg = `Expired token, please login again...`;
         customError.statusCode = StatusCodes.UNAUTHORIZED;
+    }
+    if (req.file) {
+        fs.unlinkSync(req.file.path);
+    };
+    if (req.files) {
+        if (req.files.image) {
+            fs.unlinkSync(req.files.image[0].path);
+        }
+        if (req.files.file) {
+            fs.unlinkSync(req.files.file[0].path);
+        }
     }
     res.status(customError.statusCode).json({ msg: customError.msg });
 };

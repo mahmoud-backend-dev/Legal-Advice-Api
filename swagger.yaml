@@ -1,7 +1,6 @@
 openapi: 3.0.0
 info:
   title: Legal Advice
-  description: Testing Api Development By Mahmoud Hamdi
   contact: {}
   version: '1.0'
 servers:
@@ -54,10 +53,10 @@ paths:
               allOf:
               - $ref: '#/components/schemas/LoginRequest'
               - example:
-                  email: user@test.com
+                  email: test@gmail.com
                   password: '123456'
             example:
-              email: user@test.com
+              email: test@gmail.com
               password: '123456'
         required: true
       responses:
@@ -81,9 +80,9 @@ paths:
               allOf:
               - $ref: '#/components/schemas/ForgetPasswordRequest'
               - example:
-                  email: test@gmail.com
+                  email: mh3908334@gmail.com
             example:
-              email: test@gmail.com
+              email: mh3908334@gmail.com
         required: true
       responses:
         '200':
@@ -106,10 +105,10 @@ paths:
               allOf:
               - $ref: '#/components/schemas/VerifyResetCodeRequest'
               - example:
-                  email: test@gmail.com
+                  email: mh3908334@gmail.com
                   resetCode: '573257'
             example:
-              email: test@gmail.com
+              email: mh3908334@gmail.com
               resetCode: '573257'
         required: true
       responses:
@@ -134,10 +133,10 @@ paths:
               - $ref: '#/components/schemas/ResetPasswordRequest'
               - example:
                   newPassword: '123456'
-                  email: test@gmail.com
+                  email: mh3908334@gmail.com
             example:
               newPassword: '123456'
-              email: test@gmail.com
+              email: mh3908334@gmail.com
         required: true
       responses:
         '200':
@@ -197,15 +196,16 @@ paths:
       operationId: RemoveLink
       parameters: []
       requestBody:
+        description: ''
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                link:
-                  type: string
-              required:
-                - link
+              allOf:
+              - $ref: '#/components/schemas/RemoveLinkRequest'
+              - example:
+                  link: Test4
+            example:
+              link: Test4
         required: true
       responses:
         '200':
@@ -233,7 +233,6 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
     patch:
       tags:
       - About Me
@@ -289,7 +288,6 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /user/admin/{id}:
     post:
       tags:
@@ -350,9 +348,8 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /user/admin/signup:
-    post:
+    patch:
       tags:
       - About Me
       summary: Signup As Admin
@@ -367,11 +364,11 @@ paths:
               - $ref: '#/components/schemas/SignupAsAdminRequest'
               - example:
                   name: Admin
-                  email: mh3908334@gmail.com
+                  email: admin@gmail.com
                   password: '123456'
             example:
               name: Admin
-              email: mh3908334@gmail.com
+              email: admin@gmail.com
               password: '123456'
         required: true
       responses:
@@ -379,7 +376,6 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /info/criminalDictionary/{id}:
     delete:
       tags:
@@ -732,21 +728,38 @@ paths:
       operationId: AddQuestion
       parameters: []
       requestBody:
-        description: ''
         content:
-          application/json:
+          multipart/form-data:
+            encoding: {}
             schema:
-              allOf:
-              - $ref: '#/components/schemas/AddQuestionRequest'
-              - example:
-                  title: Test
-                  subTitle: Test Test
-                  desc: 'Test Test Test Test Test Test Test Test '
-            example:
-              title: Test
-              subTitle: Test Test
-              desc: 'Test Test Test Test Test Test Test Test '
-        required: true
+              required:
+              - image
+              - title
+              - subTitle[0][question]
+              - subTitle[0][answer]
+              - subTitle[1][question]
+              - subTitle[1][answer]
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                  example: القانون الجنائي
+                subTitle[0][question]:
+                  type: string
+                  example: سوال 6
+                subTitle[0][answer]:
+                  type: string
+                  example: اجابة 6
+                subTitle[1][question]:
+                  type: string
+                  example: سوال 66
+                subTitle[1][answer]:
+                  type: string
+                  example: اجابة 66
+        required: false
       responses:
         '200':
           description: ''
@@ -755,6 +768,26 @@ paths:
       security:
       - bearer: []
   /questions/{id}:
+    get:
+      tags:
+      - Question
+      summary: Get Specific Question
+      operationId: GetSpecificQuestion
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
     patch:
       tags:
       - Question
@@ -769,17 +802,22 @@ paths:
         schema:
           type: string
       requestBody:
-        description: ''
         content:
-          application/json:
+          multipart/form-data:
+            encoding: {}
             schema:
-              allOf:
-              - $ref: '#/components/schemas/UpdateSpecificQuestionRequest'
-              - example:
-                  title: Test 18
-            example:
-              title: Test 18
-        required: true
+              required:
+              - image
+              - title
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                  example: الاوراق المالية
+        required: false
       responses:
         '200':
           description: ''
@@ -1230,7 +1268,7 @@ components:
           type: string
       example:
         name: Test
-        email: mh3908334@gmail.com
+        email: test@gmail.com
         password: '123456'
     LoginRequest:
       title: LoginRequest
@@ -1244,7 +1282,7 @@ components:
         password:
           type: string
       example:
-        email: user@test.com
+        email: test@gmail.com
         password: '123456'
     ForgetPasswordRequest:
       title: ForgetPasswordRequest
@@ -1309,7 +1347,7 @@ components:
         link:
           type: string
       example:
-        link: Test 55
+        link: Test4
     SignupAsAdminRequest:
       title: SignupAsAdminRequest
       required:
@@ -1326,7 +1364,7 @@ components:
           type: string
       example:
         name: Admin
-        email: mh3908334@gmail.com
+        email: admin@gmail.com
         password: '123456'
     RemoveCriminalDictionaryRequest:
       title: RemoveCriminalDictionaryRequest
@@ -1362,34 +1400,6 @@ components:
           type: string
       example:
         title: 'Test '
-    AddQuestionRequest:
-      title: AddQuestionRequest
-      required:
-      - title
-      - subTitle
-      - desc
-      type: object
-      properties:
-        title:
-          type: string
-        subTitle:
-          type: string
-        desc:
-          type: string
-      example:
-        title: Test
-        subTitle: Test Test
-        desc: 'Test Test Test Test Test Test Test Test '
-    UpdateSpecificQuestionRequest:
-      title: UpdateSpecificQuestionRequest
-      required:
-      - title
-      type: object
-      properties:
-        title:
-          type: string
-      example:
-        title: Test 18
     RemoveSpecificQuestionRequest:
       title: RemoveSpecificQuestionRequest
       required:

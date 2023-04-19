@@ -5,14 +5,15 @@ const { BadRequest } = require('../../errors');
 const User = require('../../models/User');
 
 exports.createAboutMeValidator = [
+  param('id')
+    .custom(async (val) => {
+      const user = await User.findOne({ _id: val, role: 'admin' });
+      if (!user)
+        throw new BadRequest(`No such user for this id: ${val} or not id for user as admin`)
+    }),
   body('name').notEmpty().withMessage('Name required'),
   body('email').notEmpty().withMessage('E-mail required')
-    .isEmail().withMessage('E-mail Invalid Format')
-    .custom(async (val) => {
-      const user = await User.findOne({ email: val });
-      if (user)
-        throw new BadRequest('E-mail already used choose anthor E-mail');
-    }),
+    .isEmail().withMessage('E-mail Invalid Format'),
   body('image').custom(async (val, { req }) => {
     if (!req.file)
       throw new BadRequest('Please provide image for you and enctype equal multipart/form-data');

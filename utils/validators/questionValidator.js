@@ -4,6 +4,11 @@ const validationMiddleWare = require('../../middleware/validatorMiddleware');
 const Question = require('../../models/Question');
 
 exports.addQueValidator = [
+  body('image')
+    .custom(async (val, { req }) => {
+      if (!req.file)
+        throw new BadRequest('Please provide image for question and enctype equal multipart/form-data')
+    }),
   body('title').notEmpty().withMessage('Title Requied'),
   body('subTitle').isArray().withMessage('Sub Title must be an array of object has two key question and answer '),
   body('subTitle.*.question').notEmpty().withMessage('Question Required'),

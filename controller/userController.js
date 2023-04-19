@@ -18,7 +18,7 @@ exports.allowTo = (...roles) => asyncHandler(async (req, res, next) => {
 });
 
 // @decs Signup As Admin
-// @route POST /api/v1/user/admin
+// @route PATCH /api/v1/user/admin
 // @ptotect Protect Admin
 exports.signupAsAdmin = asyncHandler(async (req, res) => {
   const user = await User.findOneAndUpdate(

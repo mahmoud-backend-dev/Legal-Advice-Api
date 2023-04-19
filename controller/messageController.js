@@ -9,6 +9,7 @@ const { BadRequest } = require('../errors');
 // @route POST /api/v1/messages
 // @ptotect Protected/User
 exports.sendMessage = asyncHandler(async (req, res) => {
+  
   if (req.files) {
     if (req.files.image) {
       req.body.image = `${process.env.BASE_URL}/Client/${req.files.image[0].filename}`
@@ -17,6 +18,7 @@ exports.sendMessage = asyncHandler(async (req, res) => {
       req.body.file = `${process.env.BASE_URL}/Client/${req.files.file[0].filename}`
     }
   }
+
   if (Object.keys(req.body).length == 0)
     return res.status(StatusCodes.NO_CONTENT).send()
   req.body.user = req.user._id;
