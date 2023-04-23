@@ -17,7 +17,7 @@ exports.addQuestion = asyncHandler(async (req, res) => {
 // @route GET /api/v1/questions
 // @ptotect Protected/User/Manager/Admin
 exports.getAllQuestions = asyncHandler(async (req, res) => {
-  const questions = await Question.find({}).select('title');
+  const questions = await Question.find({}).select('title image');
   res.status(StatusCodes.OK).json({ status: "Success", count: questions.length, questions });
 });
 
