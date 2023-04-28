@@ -1,17 +1,9 @@
 const { body, param } = require('express-validator');
 const { BadRequest } = require('../../errors');
 const validationMiddleWare = require('../../middleware/validatorMiddleware');
-const Info = require('../../models/Info');
+const CriminalDictionary = require('../../models/CriminalDictionary');
 
-exports.addLinkValidator = [
-  body('videos').notEmpty().withMessage('Array Of Links Videos Required'),
-  validationMiddleWare,
-];
 
-exports.deleteLinkValidator = [
-  body('link').notEmpty().withMessage('Link Required'),
-  validationMiddleWare,
-];
 
 exports.addcriminalDictionaryValidator = [
   body('title').notEmpty().withMessage('Title Required')
@@ -23,7 +15,7 @@ exports.addcriminalDictionaryValidator = [
 
 exports.deleteCriminalDictionaryValidator = [
   param('id').custom(async (val) => {
-    const criminalDictionary = await Info.findById(val);
+    const criminalDictionary = await CriminalDictionary.findById(val);
     if (!criminalDictionary)
       throw new BadRequest(`No such ciminal dictionary for this id: ${val}`);
   }),
@@ -32,7 +24,7 @@ exports.deleteCriminalDictionaryValidator = [
 
 exports.getCriminalDictionaryValidator = [
   param('id').custom(async (val) => {
-    const criminalDictionary = await Info.findById(val);
+    const criminalDictionary = await CriminalDictionary.findById(val);
     if (!criminalDictionary)
       throw new BadRequest(`No such ciminal dictionary for this id: ${val}`);
   }),

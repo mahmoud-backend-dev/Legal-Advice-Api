@@ -5,35 +5,27 @@ const {
   allowTo
 } = require('../controller/userController');
 const {
-  addLinkValidator,
-  deleteLinkValidator,
   addcriminalDictionaryValidator,
   deleteCriminalDictionaryValidator,
   getCriminalDictionaryValidator,
-} = require('../utils/validators/infoValidator');
+} = require('../utils/validators/criminalDictionaryValidator');
 
 const {
-  addLinksOfVideos,
-  getAllLinksOfVideos,
-  deleteLink,
   addCriminalDictionary,
   getAllCriminalDictionary,
   removeCriminalDictionary,
   getSpecificCriminalDictionary
-} = require('../controller/infoController');
+} = require('../controller/criminalDictionaryController');
 
 
-router.route('/links')
-  .post(authMiddleWare, allowTo('manager', 'admin'), addLinkValidator, addLinksOfVideos)
-  .get(getAllLinksOfVideos)
-  .patch(authMiddleWare, allowTo('manager', 'admin'), deleteLinkValidator, deleteLink);
 
 
-router.route('/criminalDictionary')
+
+router.route('/')
   .post(authMiddleWare, allowTo('manager', 'admin'), addcriminalDictionaryValidator, addCriminalDictionary)
   .get(getAllCriminalDictionary);
 
-router.route('/criminalDictionary/:id')
+router.route('/:id')
   .get(getCriminalDictionaryValidator, getSpecificCriminalDictionary)
   .delete(
   authMiddleWare, allowTo('manager', 'admin'),

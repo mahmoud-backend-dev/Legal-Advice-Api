@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
 
-const infoSchame = new mongoose.Schema({
+const videoSchema = new mongoose.Schema({
+  link: {
+    type:String,
+  },
   title: {
     type: String,
   },
   desc: {
     type: String,
   },
-  videos: [String],
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Info', infoSchame);
+module.exports = mongoose.model('Video', videoSchema);
