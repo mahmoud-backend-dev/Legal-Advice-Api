@@ -3,6 +3,8 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const app = express();
+const httpServer = require('http').createServer(app);
+const IO = require('socket.io')(httpServer);
 const port = process.env.PORT || 1812;
 // Setting Security For App
 const cors = require('cors');
@@ -18,7 +20,7 @@ const errorHandler = require('./middleware/error-handler');
 const notFoundErr = require('./middleware/notFoundMiddleware');
 const connectDB = require('./db/connectDB');
 const mountRoutes = require('./routes');
-
+const Chat = require('./models/Chat');
 
 
 // Enable other domains to access your application
@@ -64,10 +66,33 @@ mountRoutes(app);
 app.use(errorHandler);
 app.use(notFoundErr);
 
+// Set Up The Socket.io connection
+IO.on('connection', (client) => {
+  console.log('New User Connceted');
+
+  // Join a chat room with specific for recipient id
+  client.on('joinRoom', (recipient) => {
+    client.join(recipient);
+    console.log(`User joined room ${recipient}`);
+  })
+
+  // Handle incoming message 
+  client.on('message', async (data) => {
+    console.log(`Message received: ${data.message}`);
+
+    // Broadcast the message to the other client
+    client.to(data.recipient).emit('message', data);
+
+    // Save Messages in MongoDB
+    await Chat.create(data);
+
+  })
+})
+
 const start = async () => {
   try {
     await connectDB(process.env.URI);
-    app.listen(port, () => console.log(`Listen server on http://localhost:${port}`));
+    httpServer.listen(port, () => console.log(`Listen server on http://localhost:${port}`));
   } catch (error) {
     console.log(error);
   }
