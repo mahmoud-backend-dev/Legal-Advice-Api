@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const httpServer = require('http').createServer(app);
-const IO = require('socket.io')(httpServer);
+const io = require('socket.io')(httpServer);
 const port = process.env.PORT || 1812;
 // Setting Security For App
 const cors = require('cors');
@@ -67,7 +67,7 @@ app.use(errorHandler);
 app.use(notFoundErr);
 
 // Set Up The Socket.io connection
-IO.on('connection', (client) => {
+io.on('connection', (client) => {
   console.log('New User Connceted');
 
   // Join a chat room with specific for recipient id
