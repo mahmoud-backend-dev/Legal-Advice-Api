@@ -70,10 +70,12 @@ app.use(notFoundErr);
 io.on('connection', (client) => {
   console.log('New User Connceted');
 
+  let roomId;
   // Join a chat room with specific for recipient id
-  client.on('joinRoom', (recipient) => {
-    client.join(recipient);
-    console.log(`User joined room ${recipient}`);
+  client.on('joinRoom', (userId) => {
+    client.join(userId);
+    roomId = userId;
+    console.log(`User joined room ${userId}`);
   })
 
   // Handle incoming message 
@@ -84,7 +86,7 @@ io.on('connection', (client) => {
     io.to(client.id).emit('myMessage', data);
 
     // Broadcast the message to the other client
-    client.to(data.recipient).emit('message', data);
+    client.to(roomId).emit('message', data);
     // Save Messages in MongoDB
     Chat.create(data);
   })
