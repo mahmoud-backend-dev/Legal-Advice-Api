@@ -86,7 +86,7 @@ io.on('connection', (client) => {
     // Broadcast the message to the other client
     client.to(data.recipient).emit('message', data);
     // Save Messages in MongoDB
-    await Chat.create(data);
+    Chat.create(data);
   })
 
 })
