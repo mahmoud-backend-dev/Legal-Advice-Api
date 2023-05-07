@@ -42,7 +42,7 @@ exports.signupAsAdmin = asyncHandler(async (req, res) => {
 exports.loginAsAdmin = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email: req.body.email, role: 'admin' });
   if (!user)
-    throw new NotFoundError(`No such user or not admin for this email: ${req.body.email}`);
+    throw new BadRequest(`No such user or not admin for this email: ${req.body.email}`);
   const isMatch = await user.comparePassword(req.body.password);
   if (!user || !isMatch)
     throw new BadRequest('Password or E-mail incorrect');
