@@ -18,22 +18,39 @@ exports.allowTo = (...roles) => asyncHandler(async (req, res, next) => {
 });
 
 // @decs Signup As Admin
-// @route PATCH /api/v1/user/admin
+// @route PATCH /api/v1/user/admin/signup
 // @ptotect Protect Admin
 exports.signupAsAdmin = asyncHandler(async (req, res) => {
   const user = await User.findOneAndUpdate(
     {
-      role:'admin'
+      role: 'admin'
     },
     req.body,
     {
-      new:true
+      new: true
     }
   )
   const token = user.createJWT();
   await user.hashPass();
   res.status(StatusCodes.CREATED).json({ token, user: santizeData(user) });
-})
+});
+
+
+// @decs Login As Admin
+// @route POST /api/v1/user/admin/login
+// @ptotect Protect Admin
+exports.loginAsAdmin = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email, role: 'admin' });
+  if (!user)
+    throw new NotFoundError(`No such user or not admin for this email: ${req.body.email}`);
+  const isMatch = await user.comparePassword(req.body.password);
+  if (!user || !isMatch)
+    throw new BadRequest('Password or E-mail incorrect');
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({ status: "Success", token, user: santizeData(user) });
+});
+
+
 // @decs About Me
 // @route POST /api/v1/user/aboutMe/:id
 // @ptotect Protected/Admin/Manager
@@ -93,7 +110,7 @@ exports.signup = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user)
-    throw new NotFoundError(`No such user for this id: ${req.body.email}`);
+    throw new NotFoundError(`No such user for this email: ${req.body.email}`);
   const isMatch = await user.comparePassword(req.body.password);
   if (!user || !isMatch)
     throw new BadRequest('Password or E-mail incorrect');
